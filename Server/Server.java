@@ -21,12 +21,12 @@ public final class Server {
 			System.out.println("User didn't enter port, defaulting to 1000");
 		}
 
-    System.out.println("Server starting in port number: " + port)
+    System.out.println("Server starting in port number: " + port);
     
   }
   public static class Note {
     public final int color;
-    public final string message;
+    public final String message;
     public final int x;
     public final int y;
     public boolean pinned;
