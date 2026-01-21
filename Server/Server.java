@@ -24,11 +24,4 @@ public final class Server {
     System.out.println("Server starting in port number: " + port);
     
   }
-  public static class Note {
-    public final int color;
-    public final String message;
-    public final int x;
-    public final int y;
-    public boolean pinned;
-  }
 }
