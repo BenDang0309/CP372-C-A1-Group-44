@@ -1,7 +1,7 @@
 import java.util.* ;
 
 public class Note {
-  public final int color;
+  public final String color;
   public final String message;
   public final int x;
   public final int y;
