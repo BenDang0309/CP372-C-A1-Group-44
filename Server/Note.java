@@ -7,15 +7,15 @@ public class Note {
   public final int y;
   public final int width;
   public final int height;
-  public boolean pinned;
+  private int pinCount;
 
-  public Note(int x, int y, String color, String message) {
+  public Note(int x, int y, int width, int height, String color, String message) {
     this.color = color;
     this.message = message;
     this.x = x;
     this.y = y;
-    this.width;
-    this.height;
-    this.pinned = pinned;
+    this.width = width;
+    this.height = height;
+    this.pinCount = 0;
   }
 }
