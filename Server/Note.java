@@ -1,5 +1,15 @@
 import java.util.* ;
 
+class Pin {
+  public final int x;
+  public final int y;
+
+  public Pin(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
 public class Note {
   public final String color;
   public final String message;
@@ -7,7 +17,7 @@ public class Note {
   public final int y;
   public final int width;
   public final int height;
-  private int pinCount;
+  private List<Pin> pins;
 
   public Note(int x, int y, int width, int height, String color, String message) {
     this.color = color;
@@ -16,31 +26,48 @@ public class Note {
     this.y = y;
     this.width = width;
     this.height = height;
-    this.pinCount = 0;
-  }
-
-  // add pin
-  public synchronized void pin() {
-    pinCount++;
-  }
-
-  // remove pin but check if there is a pin to remove
-  public synchronized boolean unpin() {
-    if (pinCount == 0) {
-      return false;
-    }
-    pinCount--;
-    return true;
+    this.pins = new ArrayList<>();
   }
 
   // get number of pins
   public synchronized int getPinCount() {
-    return pinCount;
+    return pins.size();
+  }
+  
+  // check if there is a pin in given coordinates. Returns the position in list if there is, else -1
+  public synchronized int isTherePin(int px, int py) {
+    for (int i = 0; i < pins.size(); i++) {
+      Pin p = pins.get(i);
+      if (p.x == px && p.y == py) { 
+        return i; // found it      
+      }
+    }
+    return -1; // there wasn't a pin there
+  }
+  
+  // add pin
+  public synchronized boolean addPin(int px, int py) {
+    int i = isTherePin(px, py);
+    if (i == -1) {
+      pins.add(new Pin(px, py));
+      return true;
+    }
+    return false;
+  }
+
+  // remove pin but check if there is a pin to remove
+  public synchronized boolean unPin(int ux, int uy) {
+    int i = isTherePin(ux, uy);
+    if (i != -1) {
+      pins.remove(i);
+      return true;
+    }
+    return false; // there wasn't a pin there
   }
 
   // check if there is a pin, for shake
   public synchronized boolean isPinned() {
-    return pinCount > 0;
+    return getPinCount() > 0;
   }
 
   // check if a note completely overlaps with another note
@@ -54,7 +81,6 @@ public class Note {
   }
 
   // getters
-  public String getId() { return id; }
   public String getColor() { return color; }
   public String getMessage() { return message; }
   public int getX() { return x; }
