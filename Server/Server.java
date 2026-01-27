@@ -8,18 +8,18 @@ public final class Server {
   public static ConcurrentHashMap<String, Note> notes = new ConcurrentHashMap<>(); // stores the notes by their coordinates
   
   public static void main(String argv[]) {
-    int port = 1000;
+    int port = 9000;
 
     if (argv.length > 0) {
         try {
             port = Integer.valueOf(argv[0]);
         }
         catch (NumberFormatException e) {
-            System.out.println("invalid port, defaulting to 1000");
+            System.out.println("invalid port, defaulting to 9000");
         }
     }
     else {
-        System.out.println("User didn't enter port, defaulting to 1000");
+        System.out.println("User didn't enter port, defaulting to 9000");
     }
 
     ExecutorService pool = Executors.newCachedThreadPool(); // pool of threads
