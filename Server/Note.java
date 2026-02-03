@@ -80,6 +80,11 @@ public class Note {
     return (cx >= x) && (cx < x + width) && (cy >= y) && (cy < y + height);
   }
 
+  // format a return string for listing notes in board.java
+  public String formatted() {
+    return "NOTE " + x + " " + y + " " + width + " " + height + " " + color + " " + message + " " + getPinCount();
+  } 
+  
   // getters
   public String getColor() { return color; }
   public String getMessage() { return message; }
