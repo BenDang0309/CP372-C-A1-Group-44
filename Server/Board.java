@@ -1,4 +1,4 @@
-import java.ulti.*;
+import java.util.*;
 
 public class Board {
   private final int boardW;
