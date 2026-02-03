@@ -42,10 +42,69 @@ public boolean isValidColor(String color) {
   return colors.contains(color.trim().toLowerCase());
 }
 
-public List<String> getNotes() {
+// get list of all notes to iterate through for GET
+public synchronized List<String> getNotes() {
   List<String> result = new ArrayList<>(notes.size());
   for (Note n : notes) result.add(n.formatted());
   return result;
+}
+
+// checks for errors, then post note into board
+public synchronized String post(int x, int y, String color, String message) {
+  if (x < 0 || y < 0 || x + noteW > boardW || y + noteH > boardH) return "ERROR OUT_OF_BOUNDS";
+  if (!isValidColor(color)) return "ERROR COLOR_NOT_SUPPORTED";
+  for (Note n : notes) {
+    if (n.overlap(x, y, noteW, noteH)) {
+      return "ERROR COMPLETE_OVERLAP";
+    }
+  }
+  Note created = new Note(x, y, noteW, noteH, color.trim().toLowerCase(), standardize(message));
+  notes.add(created);
+  return "OK"
+}
+
+// pins all notes containing coordinates (x, y), then returns notes pinned
+public synchronized int pin(int x, int y){
+  int count = 0;
+  for (Note n : notes) {
+    if (n.containsPoint(x, y)) {
+      n.addPin(x, y);
+      count++;
+    }
+  }
+  return count;
+}
+
+// unpins one pin, as stated in the specifications. Return true if successful, false otherwise
+public synchronized boolean unPinOne(int x, int y){
+  for (Note n : notes) {
+    if (n.containsPoint(x, y) && n.unPin(x, y)) {
+      return True;
+    }
+  }
+  return False;
+}
+
+// removes all unpinned notes
+public synchronized void shake(){
+  Iterator<Note> i = notes.iterator();
+  while (i.hasNext()) {
+    Note n = i.next();
+    if (!n.isPinned()) {
+      i.remove();
+    }
+  }
+}
+
+// removes all notes and their respective pins alongside them
+public synchronized void clear() {
+  notes.clear();
+}
+
+// removes leading/trailing spaces and newlines 
+private String standardize(String msg) {
+  if (msg == null) return "";
+  return msg.replaceAll("[\\r\\n]+", " ").trim();
 }
 
 // getters
