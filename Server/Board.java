@@ -110,5 +110,5 @@ public class Board {
   public int getBoardH() { return boardH; }
   public int getNoteW() { return noteW; }
   public int getNoteH() { return noteH; }
-  public List<String> getColors() { return new ArrayList<>(colors) }
+  public List<String> getColors() { return new ArrayList<>(colors); }
 }
