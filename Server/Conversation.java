@@ -21,7 +21,7 @@ final class Conversation implements Runnable {
 
   // tells client the rules of the board
   private void sendHandshake() {
-    out.println("BOARD " + board.getWidth() + " " + board.getHeight());
+    out.println("BOARD " + board.getBoardW() + " " + board.getBoardH());
     out.println("NOTE " + board.getNoteW() + " " + board.getNoteH());
     out.println("COLORS " + String.join(",", board.getColors()));
   }
