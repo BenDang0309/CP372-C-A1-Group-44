@@ -92,5 +92,7 @@ public class Note {
   public int getY() { return y; }
   public int getWidth() { return width; }
   public int getHeight() { return height; }
-  
+  public synchronized List<Pin> getPins() {
+    return new ArrayList<>(pins);
+  }
 }
