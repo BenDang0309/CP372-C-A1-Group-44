@@ -106,6 +106,9 @@ public class Board {
   }
   
   // getters
+  public int getBoardW() { return boardW }
+  public int getBoardH() { return boardH }
   public int getNoteW() { return noteW; }
   public int getNoteH() { return noteH; }
+  public List<String> getColors() { return new ArrayList<>(colors) }
 }
