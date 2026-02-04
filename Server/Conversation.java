@@ -36,7 +36,7 @@ final class Conversation implements Runnable {
         String cmd = line.split("\\s+", 2)[0].toUpperCase();
 
         // check command
-        switch cmd {
+        switch (cmd) {
           case "POST":
             handlePost(line);
             break;
