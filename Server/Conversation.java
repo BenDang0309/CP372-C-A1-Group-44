@@ -59,7 +59,7 @@ final class Conversation implements Runnable {
             handleDisconnect();
             break;
           default:
-            out.println("ERROR INVALID_FORMAT Unknown command: " + cmd);
+            out.println("ERROR INVALID_FORMAT Unknown command");
         }
       }
     } catch (IOException e) {
@@ -81,7 +81,7 @@ final class Conversation implements Runnable {
       String color = parts[3];
       String message = parts[4];
       String err = board.post(x, y, color, message);
-      if (err == "OK") out.println("OK POSTED");
+      if (err == "OK") out.println("OK NOTE_POSTED");
       else out.println(err);
     } catch (NumberFormatException e) {
       out.println("ERROR INVALID_FORMAT POST coordinates must be integers");
@@ -127,13 +127,13 @@ final class Conversation implements Runnable {
   // handles SHAKE command
   private void handleShake(String line) {
     board.shake();
-    out.println("OK SHAKEN");
+    out.println("OK SHAKE_COMPLETE");
   }
 
   // handles CLEAR command
   private void handleClear(String line) {
     board.clear();
-    out.println("OK CLEARED");
+    out.println("OK CLEAR_COMPLETE");
   }
 
   // handles GET command
@@ -219,7 +219,7 @@ final class Conversation implements Runnable {
   // handle DISCONNECT command
   private void handleDisconnect() {
     running = false;
-    out.println("OK DISCONNECTED");
+    out.println("OK DISCONNECT_COMPLETE");
     try { sock.close(); } catch (IOException ignored) {}
   }
 }
