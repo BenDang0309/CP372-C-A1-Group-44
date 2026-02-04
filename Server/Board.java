@@ -108,6 +108,6 @@ private String standardize(String msg) {
 }
 
 // getters
-public string getInitLine { return initLine; }
+public String getInitLine { return initLine; }
 public int getNoteW() { return noteW; }
 public int getNoteH() { return noteH; }
