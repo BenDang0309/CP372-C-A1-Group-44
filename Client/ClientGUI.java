@@ -1,161 +1,142 @@
-// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Font;
+import java.awt.*;
 import java.io.IOException;
-import java.util.Iterator;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
+import javax.swing.*;
+import javax.swing.border.*;
 
 public class ClientGUI extends JFrame {
-   private final ProtocolClient client = new ProtocolClient();
-   private JTextField hostField = new JTextField("127.0.0.1", 12);
-   private JTextField portField = new JTextField("4554", 6);
-   private JButton connectBtn = new JButton("Connect");
-   private JButton disconnectBtn = new JButton("Disconnect");
-   private JTextArea output = new JTextArea(14, 60);
-   private JTextField postX = new JTextField("10", 5);
-   private JTextField postY = new JTextField("10", 5);
-   private JComboBox<String> postColor = new JComboBox();
-   private JTextArea postMsg = new JTextArea(3, 40);
-   private JButton postBtn = new JButton("POST");
-   private JTextField pinX = new JTextField("15", 5);
-   private JTextField pinY = new JTextField("12", 5);
-   private JButton pinBtn = new JButton("PIN");
-   private JButton unpinBtn = new JButton("UNPIN");
-   private JButton getBtn = new JButton("GET");
-   private JButton getPinsBtn = new JButton("GET PINS");
-   private JButton shakeBtn = new JButton("SHAKE");
-   private JButton clearBtn = new JButton("CLEAR");
 
-   public ClientGUI() {
-      super("Bulletin Board Client");
-      this.output.setEditable(false);
-      this.output.setFont(new Font("Monospaced", 0, 12));
-      JPanel var1 = new JPanel();
-      var1.add(new JLabel("Host:"));
-      var1.add(this.hostField);
-      var1.add(new JLabel("Port:"));
-      var1.add(this.portField);
-      var1.add(this.connectBtn);
-      var1.add(this.disconnectBtn);
-      JPanel var2 = new JPanel();
-      var2.setBorder(new TitledBorder("POST"));
-      var2.add(new JLabel("x"));
-      var2.add(this.postX);
-      var2.add(new JLabel("y"));
-      var2.add(this.postY);
-      var2.add(this.postColor);
-      var2.add(new JScrollPane(this.postMsg));
-      var2.add(this.postBtn);
-      JPanel var3 = new JPanel();
-      var3.setBorder(new TitledBorder("PIN / UNPIN"));
-      var3.add(new JLabel("x"));
-      var3.add(this.pinX);
-      var3.add(new JLabel("y"));
-      var3.add(this.pinY);
-      var3.add(this.pinBtn);
-      var3.add(this.unpinBtn);
-      JPanel var4 = new JPanel();
-      var4.add(this.getBtn);
-      var4.add(this.getPinsBtn);
-      var4.add(this.shakeBtn);
-      var4.add(this.clearBtn);
-      JPanel var5 = new JPanel();
-      var5.setLayout(new BoxLayout(var5, 1));
-      var5.add(var2);
-      var5.add(var3);
-      var5.add(var4);
-      this.setLayout(new BorderLayout());
-      this.add(var1, "North");
-      this.add(var5, "Center");
-      this.add(new JScrollPane(this.output), "South");
-      this.wireActions();
-      this.setDefaultCloseOperation(3);
-      this.pack();
-      this.setLocationRelativeTo((Component)null);
-   }
+    private final ProtocolClient client = new ProtocolClient();
 
-   private void wireActions() {
-      this.connectBtn.addActionListener((var1) -> {
-         try {
-            ProtocolClient$Handshake var2 = this.client.connect(this.hostField.getText(), Integer.parseInt(this.portField.getText()));
-            this.output.append("Connected\n");
-            this.postColor.removeAllItems();
-            Iterator var3 = var2.colors.iterator();
+    private JTextField hostField = new JTextField("127.0.0.1", 12);
+    private JTextField portField = new JTextField("4554", 6);
+    private JButton connectBtn = new JButton("Connect");
+    private JButton disconnectBtn = new JButton("Disconnect");
 
-            while(var3.hasNext()) {
-               String var4 = (String)var3.next();
-               this.postColor.addItem(var4);
+    private JTextArea output = new JTextArea(14, 60);
+
+    private JTextField postX = new JTextField("10", 5);
+    private JTextField postY = new JTextField("10", 5);
+    private JComboBox<String> postColor = new JComboBox<>();
+    private JTextArea postMsg = new JTextArea(3, 40);
+    private JButton postBtn = new JButton("POST");
+
+    private JTextField pinX = new JTextField("15", 5);
+    private JTextField pinY = new JTextField("12", 5);
+    private JButton pinBtn = new JButton("PIN");
+    private JButton unpinBtn = new JButton("UNPIN");
+
+    private JButton getBtn = new JButton("GET");
+    private JButton getPinsBtn = new JButton("GET PINS");
+    private JButton shakeBtn = new JButton("SHAKE");
+    private JButton clearBtn = new JButton("CLEAR");
+
+    public ClientGUI() {
+        super("Bulletin Board Client");
+
+        output.setEditable(false);
+        output.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+
+        JPanel top = new JPanel();
+        top.add(new JLabel("Host:"));
+        top.add(hostField);
+        top.add(new JLabel("Port:"));
+        top.add(portField);
+        top.add(connectBtn);
+        top.add(disconnectBtn);
+
+        JPanel postPanel = new JPanel();
+        postPanel.setBorder(new TitledBorder("POST"));
+        postPanel.add(new JLabel("x"));
+        postPanel.add(postX);
+        postPanel.add(new JLabel("y"));
+        postPanel.add(postY);
+        postPanel.add(postColor);
+        postPanel.add(new JScrollPane(postMsg));
+        postPanel.add(postBtn);
+
+        JPanel pinPanel = new JPanel();
+        pinPanel.setBorder(new TitledBorder("PIN / UNPIN"));
+        pinPanel.add(new JLabel("x"));
+        pinPanel.add(pinX);
+        pinPanel.add(new JLabel("y"));
+        pinPanel.add(pinY);
+        pinPanel.add(pinBtn);
+        pinPanel.add(unpinBtn);
+
+        JPanel cmdPanel = new JPanel();
+        cmdPanel.add(getBtn);
+        cmdPanel.add(getPinsBtn);
+        cmdPanel.add(shakeBtn);
+        cmdPanel.add(clearBtn);
+
+        JPanel center = new JPanel();
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+        center.add(postPanel);
+        center.add(pinPanel);
+        center.add(cmdPanel);
+
+        setLayout(new BorderLayout());
+        add(top, BorderLayout.NORTH);
+        add(center, BorderLayout.CENTER);
+        add(new JScrollPane(output), BorderLayout.SOUTH);
+
+        wireActions();
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+    }
+
+    private void wireActions() {
+
+        connectBtn.addActionListener(e -> {
+            try {
+                ProtocolClient.Handshake h =
+                        client.connect(hostField.getText(), Integer.parseInt(portField.getText()));
+                output.append("Connected\n");
+                postColor.removeAllItems();
+                for (String c : h.colors) postColor.addItem(c);
+            } catch (Exception ex) {
+                output.append("Connect error: " + ex.getMessage() + "\n");
             }
-         } catch (Exception var5) {
-            this.output.append("Connect error: " + var5.getMessage() + "\n");
-         }
+        });
 
-      });
-      this.disconnectBtn.addActionListener((var1) -> {
-         try {
-            this.client.disconnect();
-            this.output.append("Disconnected\n");
-         } catch (IOException var3) {
-         }
+        disconnectBtn.addActionListener(e -> {
+            try {
+                client.disconnect();
+                output.append("Disconnected\n");
+            } catch (IOException ignored) {}
+        });
 
-      });
-      this.postBtn.addActionListener((var1) -> {
-         String var10001 = this.postX.getText();
-         this.send("POST " + var10001 + " " + this.postY.getText() + " " + String.valueOf(this.postColor.getSelectedItem()) + " " + this.postMsg.getText());
-      });
-      this.pinBtn.addActionListener((var1) -> {
-         String var10001 = this.pinX.getText();
-         this.send("PIN " + var10001 + " " + this.pinY.getText());
-      });
-      this.unpinBtn.addActionListener((var1) -> {
-         String var10001 = this.pinX.getText();
-         this.send("UNPIN " + var10001 + " " + this.pinY.getText());
-      });
-      this.getBtn.addActionListener((var1) -> {
-         this.send("GET");
-      });
-      this.getPinsBtn.addActionListener((var1) -> {
-         this.send("GET PINS");
-      });
-      this.shakeBtn.addActionListener((var1) -> {
-         this.send("SHAKE");
-      });
-      this.clearBtn.addActionListener((var1) -> {
-         this.send("CLEAR");
-      });
-   }
+        postBtn.addActionListener(e ->
+                send("POST " + postX.getText() + " " + postY.getText() + " " +
+                        postColor.getSelectedItem() + " " + postMsg.getText()));
 
-   private void send(String var1) {
-      try {
-         this.output.append(">> " + var1 + "\n");
-         ProtocolClient$Response var2 = this.client.sendCommand(var1);
-         this.output.append("<< " + var2.firstLine + "\n");
-         Iterator var3 = var2.payload.iterator();
+        pinBtn.addActionListener(e ->
+                send("PIN " + pinX.getText() + " " + pinY.getText()));
 
-         while(var3.hasNext()) {
-            String var4 = (String)var3.next();
-            this.output.append("<< " + var4 + "\n");
-         }
-      } catch (Exception var5) {
-         this.output.append("ERROR: " + var5.getMessage() + "\n");
-      }
+        unpinBtn.addActionListener(e ->
+                send("UNPIN " + pinX.getText() + " " + pinY.getText()));
 
-   }
+        getBtn.addActionListener(e -> send("GET"));
+        getPinsBtn.addActionListener(e -> send("GET PINS"));
+        shakeBtn.addActionListener(e -> send("SHAKE"));
+        clearBtn.addActionListener(e -> send("CLEAR"));
+    }
 
-   public static void main(String[] var0) {
-      SwingUtilities.invokeLater(() -> {
-         (new ClientGUI()).setVisible(true);
-      });
-   }
+    private void send(String cmd) {
+        try {
+            output.append(">> " + cmd + "\n");
+            ProtocolClient.Response r = client.sendCommand(cmd);
+            output.append("<< " + r.firstLine + "\n");
+            for (String line : r.payload)
+                output.append("<< " + line + "\n");
+        } catch (Exception e) {
+            output.append("ERROR: " + e.getMessage() + "\n");
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new ClientGUI().setVisible(true));
+    }
 }
