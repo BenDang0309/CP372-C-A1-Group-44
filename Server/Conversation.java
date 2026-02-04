@@ -167,10 +167,10 @@ final class Conversation implements Runnable {
 
       // handles color=
       if (param.startsWith("color=")) {
-        color = param.substring(6);
+        color = param.substring(6).trim();
       // handles contains=
       } else if (param.startsWith("contains=")) {
-         String coords = param.substring(9);
+         String coords = param.substring(9).trim();
         
         // if the coordinates are in the next index instead of this one
         if (i + 1 < cmd.length) {
@@ -191,7 +191,7 @@ final class Conversation implements Runnable {
           return;
         }
       } else if (param.startsWith("refersTo=")) {
-        refersTo = param.substring(9);
+        refersTo = param.substring(9).trim();
       } else {
         out.println("ERROR INVALID_FORMAT GET accepts either PINS, or the optional parameters color, contains and refersTo");
         return;
