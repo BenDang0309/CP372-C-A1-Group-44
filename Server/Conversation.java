@@ -81,7 +81,7 @@ final class Conversation implements Runnable {
       String color = parts[3];
       String message = parts[4];
       String err = board.post(x, y, color, message);
-      if (err == "OK") out.println("OK NOTE_POSTED");
+      if ("OK".equals(err)) out.println("OK NOTE_POSTED");
       else out.println(err);
     } catch (NumberFormatException e) {
       out.println("ERROR INVALID_FORMAT POST coordinates must be integers");
@@ -116,7 +116,7 @@ final class Conversation implements Runnable {
     try {
       int x = Integer.parseInt(parts[1]);
       int y = Integer.parseInt(parts[2]);
-      int removed = board.unPinOne(x, y);
+      boolean removed = board.unPinOne(x, y);
       if (removed == false) out.println("ERROR UNPIN_MISS No pin inside those coordinates");
       else out.println("OK PIN_REMOVED");
     } catch (NumberFormatException e) {
@@ -142,7 +142,7 @@ final class Conversation implements Runnable {
     List<Note> notes = board.getNotes();
     
     // GET PINS
-    if (cmd[1] = "PINS") {
+    if (cmd.length() > 1 && cmd[1].equalsIgnoreCase("PINS")) {
       out.println("OK " + notes.size());
       for (Note n : notes) {
         out.println("PIN " + n.getX() + " " + n.getY());
@@ -153,8 +153,8 @@ final class Conversation implements Runnable {
     int[] contains = null; // (x, y)
     String refersTo = null;    
     
-    for (i = 0; i < cmd.length; i++) {
-      String param = params[i];
+    for (int i = 0; i < cmd.length; i++) {
+      String param = cmd[i];
 
       // handles color=
       if (param.startsWith("color=")) {
@@ -164,11 +164,11 @@ final class Conversation implements Runnable {
          String coords = param.substring(9);
         
         // if the coordinates are in the next index instead of this one
-        if (raw.trim().isEmpty() && i + 1 < tokens.length) {
-          coords = tokens[i++];
+        if (coords.trim().isEmpty() && i + 1 < cmd.length) {
+          coords = cmd[++i];
         }
         coords = coords.trim();
-        String[] parts = raw.split("\\s+");
+        String[] parts = cmd.split("\\s+");
         
         if (parts.length != 2) {
           out.println("ERROR INVALID_FORMAT GET contains= requires <x> <y>");
@@ -200,7 +200,7 @@ final class Conversation implements Runnable {
 
       // skip this note if there is a coordinate specified but the note doesn't contain that coordinate
       if (contains != null) {
-        if (!n.getX().equals(contains[0]) || !n.getY().equals(contains[1]) {
+        if ((!n.getX() != contains[0]) || !n.getY() != (contains[1])) {
           continue;
         }
       }
