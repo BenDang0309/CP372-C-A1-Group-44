@@ -80,9 +80,9 @@ public class Note {
     return (cx >= x) && (cx < x + width) && (cy >= y) && (cy < y + height);
   }
 
-  // format a return string for listing notes in board.java
+  // format a return string purely for handleGet. Repurposed from old code
   public String formatted() {
-    return "NOTE " + x + " " + y + " " + width + " " + height + " " + color + " " + message + " " + getPinCount();
+    return "NOTE " + width + " " + height + " " + color + " " + message + " " + "PINNED=" + getPinCount()>0;
   } 
   
   // getters
