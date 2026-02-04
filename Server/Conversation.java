@@ -147,13 +147,14 @@ final class Conversation implements Runnable {
       for (Note n : notes) {
         out.println("PIN " + n.getX() + " " + n.getY());
       }
+      return;
     }
 
     String color = null;
     int[] contains = null; // (x, y)
     String refersTo = null;    
     
-    for (int i = 0; i < cmd.length; i++) {
+    for (int i = 1; i < cmd.length; i++) {
       String param = cmd[i];
 
       // handles color=
