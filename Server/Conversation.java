@@ -200,7 +200,7 @@ final class Conversation implements Runnable {
 
       // skip this note if there is a coordinate specified but the note doesn't contain that coordinate
       if (contains != null) {
-        if ((!n.getX() != contains[0]) || !n.getY() != (contains[1])) {
+        if ((n.getX() != contains[0]) || n.getY() != contains[1]) {
           continue;
         }
       }
