@@ -1,45 +1,47 @@
-import java.io.* ;
-import java.net.* ;
-import java.util.* ;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.util.concurrent.*;
 
 public final class Server {
-  // Java concurrenthashmap for multi-threading
-  public static ConcurrentHashMap<String, Note> notes = new ConcurrentHashMap<>(); // stores the notes by their coordinates
-  
-  public static void main(String argv[]) {
-    int port = 9000;
-
-    if (argv.length > 0) {
+    public static void main(String[] args) {
+        // format is <port> <board_width> <board_height> <note_width> <note_height> <color1> <color2>...<colorN>
+        if (args.length < 6) {
+            System.err.println("wrong format, less than 6 inputs");
+            System.exit(1);
+        }
         try {
-            port = Integer.valueOf(argv[0]);
-        }
-        catch (NumberFormatException e) {
-            System.out.println("invalid port, defaulting to 9000");
-        }
-    }
-    else {
-        System.out.println("User didn't enter port, defaulting to 9000");
-    }
+            // seperate the input into pieces
+            final int port = Integer.parseInt(args[0]);
+            final int bw = Integer.parseInt(args[1]);
+            final int bh = Integer.parseInt(args[2]);
+            final int nw = Integer.parseInt(args[3]);
+            final int nh = Integer.parseInt(args[4]);
+            final List<String> colors = new ArrayList<>();
+            for (int i = 5; i < args.length; i++) colors.add(args[i]);
 
-    ExecutorService pool = Executors.newCachedThreadPool(); // pool of threads
+            // create the main board
+            final Board board = new Board(bw, bh, nw, nh, colors);
 
-    try (ServerSocket socket = new ServerSocket(port)) {
-        System.out.println("Server starting at port " + port);
-        // process services
-        while (true) {
-            try {
-                Socket connection = socket.accept(); // listen for TCP connection request
-                pool.submit(new Conversation(connection)); // runs the conversation task on one of the threads in the pool
+            // thread pool
+            ExecutorService pool = Executors.newCachedThreadPool();
+          
+            // socket
+            ServerSocket socket = new ServerSocket(port);
+            System.out.println("Server starting at port " + port);
+
+            // process services
+            while (true) {
+                Socket connection = socket.accept();
+                Conversation conv = new Conversation(connection, board);
+                pool.submit(conv);
             }
-            catch (IOException acceptEx) {
-                System.err.println("Accept failed: " + acceptEx.getMessage());
-            }
+        } catch (NumberFormatException e) {
+            System.err.println("Bad numeric argument: " + e.getMessage());
+        } catch (IOException ioe) {
+            System.err.println("Could not start server on port " + port + ": " + ioe.getMessage());
+        } finally {
+          pool.shutdown();
         }
-    } catch (IOException e) {
-        System.err.println("Could not start server on port " + port + ": " + e.getMessage());
-    } finally {
-        pool.shutdown();
     }
-  }
 }
