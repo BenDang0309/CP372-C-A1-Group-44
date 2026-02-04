@@ -143,9 +143,17 @@ final class Conversation implements Runnable {
     
     // GET PINS
     if (cmd.length > 1 && cmd[1].equalsIgnoreCase("PINS")) {
-      out.println("OK " + notes.size());
+      int totalPins = 0;
+      
       for (Note n : notes) {
-        out.println("PIN " + n.getX() + " " + n.getY());
+        totalPins += n.getPinCount();
+      }
+      out.println("OK " + totalPins);
+      
+      for (Note n : notes) {
+        for (Pin p : n.getPins()) {
+          out.println("PIN " + p.x + " " + p.y);
+        }
       }
       return;
     }
