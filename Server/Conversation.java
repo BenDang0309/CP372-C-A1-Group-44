@@ -96,8 +96,8 @@ final class Conversation implements Runnable {
       return;
     }
     try {
-      int x = Integer.parseInt(parts[1]);
-      int y = Integer.parseInt(parts[2]);
+      int x = Integer.parseInt(parts[1].trim());
+      int y = Integer.parseInt(parts[2].trim());
       int count = board.pin(x, y);
       if (count < 1) out.println("ERROR PIN_MISS No note inside those coordinates");
       else out.println("OK PIN_ADDED");
@@ -114,8 +114,8 @@ final class Conversation implements Runnable {
       return;
     }
     try {
-      int x = Integer.parseInt(parts[1]);
-      int y = Integer.parseInt(parts[2]);
+      int x = Integer.parseInt(parts[1].trim());
+      int y = Integer.parseInt(parts[2].trim());
       boolean removed = board.unPinOne(x, y);
       if (removed == false) out.println("ERROR UNPIN_MISS No pin inside those coordinates");
       else out.println("OK PIN_REMOVED");
@@ -185,7 +185,7 @@ final class Conversation implements Runnable {
         }
 
         try {
-          contains = new int[]{Integer.parseInt(parts[0]),Integer.parseInt(parts[1])};
+          contains = new int[]{Integer.parseInt(parts[0].trim()),Integer.parseInt(parts[1].trim())};
         } catch (NumberFormatException e) {
           out.println("ERROR INVALID_FORMAT GET contains= requires <x> <y>");
           return;
