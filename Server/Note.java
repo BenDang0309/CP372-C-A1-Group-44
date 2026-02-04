@@ -82,7 +82,7 @@ public class Note {
 
   // format a return string purely for handleGet. Repurposed from old code
   public String formatted() {
-    return "NOTE " + width + " " + height + " " + color + " " + message + " " + "PINNED=" + getPinCount()>0;
+    return "NOTE " + width + " " + height + " " + color + " " + message + " " + "PINNED=" + (getPinCount() > 0);
   } 
   
   // getters
