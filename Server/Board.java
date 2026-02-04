@@ -78,7 +78,7 @@ public synchronized int pin(int x, int y){
 // unpins one pin, as stated in the specifications. Return true if successful, false otherwise
 public synchronized boolean unPinOne(int x, int y){
   for (Note n : notes) {
-    if (n.unPin(x, y)) {
+    if (n.containsPoint(x, y) && n.unPin(x, y)) {
       return True;
     }
   }
