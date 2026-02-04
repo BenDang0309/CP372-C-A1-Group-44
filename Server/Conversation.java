@@ -142,7 +142,7 @@ final class Conversation implements Runnable {
     List<Note> notes = board.getNotes();
     
     // GET PINS
-    if (cmd.length() > 1 && cmd[1].equalsIgnoreCase("PINS")) {
+    if (cmd.length > 1 && cmd[1].equalsIgnoreCase("PINS")) {
       out.println("OK " + notes.size());
       for (Note n : notes) {
         out.println("PIN " + n.getX() + " " + n.getY());
@@ -168,7 +168,7 @@ final class Conversation implements Runnable {
           coords = cmd[++i];
         }
         coords = coords.trim();
-        String[] parts = cmd.split("\\s+");
+        String[] parts = coords.split("\\s+");
         
         if (parts.length != 2) {
           out.println("ERROR INVALID_FORMAT GET contains= requires <x> <y>");
