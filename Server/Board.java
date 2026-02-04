@@ -38,7 +38,7 @@ public class Board {
 
   // check if input color is in the set
   public boolean isValidColor(String color) {
-    if (color == null) return False;
+    if (color == null) return false;
     return colors.contains(color.trim().toLowerCase());
   }
   
