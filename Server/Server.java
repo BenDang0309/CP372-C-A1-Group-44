@@ -12,12 +12,12 @@ public final class Server {
         }
 
         ExecutorService pool = null;
-        ServerSocket serverSocket = null;
+        ServerSocket socket = null;
         int port = -1;
 
         try {
             // seperate the input into pieces
-            final int port = Integer.parseInt(args[0]);
+            port = Integer.parseInt(args[0]);
             final int bw = Integer.parseInt(args[1]);
             final int bh = Integer.parseInt(args[2]);
             final int nw = Integer.parseInt(args[3]);
@@ -29,19 +29,26 @@ public final class Server {
             final Board board = new Board(bw, bh, nw, nh, colors);
 
             // thread pool
-            ExecutorService pool = Executors.newCachedThreadPool();
+            pool = Executors.newCachedThreadPool();
           
             // socket
-            ServerSocket socket = new ServerSocket(port);
+            socket = new ServerSocket(port);
             System.out.println("Server starting at port " + port);
 
             // process services
             while (true) {
-                Socket connection = null
+                Socket connection = null;
                 try {
                     connection = socket.accept();
                     Conversation conv = new Conversation(connection, board);
                     pool.submit(conv);
+                } catch (IOException ioe) {
+                    // If socket was closed intentionally, break loop.
+                    if (socket.isClosed()) break;
+                    System.err.println("I/O error accepting connection: " + ioe.getMessage());
+                    if (connection != null && !connection.isClosed()) {
+                        try { connection.close(); } catch (IOException ignored) {}
+                    }
                 } catch (RuntimeException rte) {
                     System.err.println("Failed to start conversation: " + rte.getMessage());
                     if (connection != null && !connection.isClosed()) {
@@ -54,9 +61,11 @@ public final class Server {
         } catch (IOException ioe) {
             System.err.println("Could not start server on port " + port + ": " + ioe.getMessage());
         } finally {
-            if (pool != null) pool.shutdown();
-            if (serverSocket != null && !serverSocket.isClosed()) {
-                try { serverSocket.close(); } catch (IOException ignored) {}
+            if (pool != null) {
+                pool.shutdown();
+            }
+            if (socket != null && !socket.isClosed()) {
+                try { socket.close(); } catch (IOException ignored) {}
             }
         }
     }
