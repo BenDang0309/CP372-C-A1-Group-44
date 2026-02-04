@@ -24,7 +24,7 @@ public class Board {
     this.boardH = boardH;
     this.noteW = noteW;
     this.noteH = noteH;
-    this.colors = new HashSet<>(colors);
+    this.colors = new HashSet<>();
 
     for (String c : colors) {
       if (c != null) {
