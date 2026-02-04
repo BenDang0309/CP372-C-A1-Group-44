@@ -165,8 +165,8 @@ final class Conversation implements Runnable {
          String coords = param.substring(9);
         
         // if the coordinates are in the next index instead of this one
-        if (coords.trim().isEmpty() && i + 1 < cmd.length) {
-          coords = cmd[++i];
+        if (i + 1 < cmd.length) {
+          coords = coords + " " + cmd[++i];
         }
         coords = coords.trim();
         String[] parts = coords.split("\\s+");
@@ -182,8 +182,8 @@ final class Conversation implements Runnable {
           out.println("ERROR INVALID_FORMAT GET contains= requires <x> <y>");
           return;
         }
-      } else if (param.startsWith("refersTo")) {
-        refersTo = param.substring("refersTo=".length());
+      } else if (param.startsWith("refersTo=")) {
+        refersTo = param.substring(9);
       } else {
         out.println("ERROR INVALID_FORMAT GET accepts either PINS, or the optional parameters color, contains and refersTo");
         return;
@@ -200,10 +200,8 @@ final class Conversation implements Runnable {
       }
 
       // skip this note if there is a coordinate specified but the note doesn't contain that coordinate
-      if (contains != null) {
-        if ((n.getX() != contains[0]) || n.getY() != contains[1]) {
-          continue;
-        }
+      if (contains != null && !n.containsPoint(contains[0], contains[1])) {
+        continue;
       }
 
       if (refersTo != null && !n.getMessage().contains(refersTo)) {
