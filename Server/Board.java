@@ -43,10 +43,8 @@ public boolean isValidColor(String color) {
 }
 
 // get list of all notes to iterate through for GET
-public synchronized List<String> getNotes() {
-  List<String> result = new ArrayList<>(notes.size());
-  for (Note n : notes) result.add(n.formatted());
-  return result;
+public synchronized List<Note> getNotes() {
+  return new ArrayList<>(notes);
 }
 
 // checks for errors, then post note into board
