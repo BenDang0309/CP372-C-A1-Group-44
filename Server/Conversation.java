@@ -76,8 +76,8 @@ final class Conversation implements Runnable {
       return;
     }
     try {
-      int x = Integer.parseInt(parts[1]);
-      int y = Integer.parseInt(parts[2]);
+      int x = Integer.parseInt(parts[1].trim());
+      int y = Integer.parseInt(parts[2].trim());
       String color = parts[3];
       String message = parts[4];
       String err = board.post(x, y, color, message);
