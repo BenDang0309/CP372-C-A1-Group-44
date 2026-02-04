@@ -138,7 +138,82 @@ final class Conversation implements Runnable {
 
   // handles GET command
   private void handleGet(String line) {
+    String[] cmd = line.trim().split("\\s+");
+    List<Note> notes = board.getNotes();
+    
+    // GET PINS
+    if (cmd[1] = "PINS") {
+      out.println("OK " + notes.size());
+      for (Note n : notes) {
+        out.println("PIN " + n.getX() + " " + n.getY());
+      }
+    }
 
+    String color = null;
+    int[] contains = null; // (x, y)
+    String refersTo = null;    
+    
+    for (i = 0; i < cmd.length; i++) {
+      String param = params[i];
+
+      // handles color=
+      if (param.startsWith("color=")) {
+        color = param.substring(6);
+      // handles contains=
+      } else if (param.startsWith("contains=")) {
+         String coords = param.substring(9);
+        
+        // if the coordinates are in the next index instead of this one
+        if (raw.trim().isEmpty() && i + 1 < tokens.length) {
+          coords = tokens[i++];
+        }
+        coords = coords.trim();
+        String[] parts = raw.split("\\s+");
+        
+        if (parts.length != 2) {
+          out.println("ERROR INVALID_FORMAT GET contains= requires <x> <y>");
+          return;
+        }
+
+        try {
+          contains = new int[]{Integer.parseInt(parts[0]),Integer.parseInt(parts[1])};
+        } catch (NumberFormatException e) {
+          out.println("ERROR INVALID_FORMAT GET contains= requires <x> <y>");
+          return;
+        }
+      } else if (param.startsWith("refersTo")) {
+        refersTo = param.substring("refersTo=".length());
+      } else {
+        out.println("ERROR INVALID_FORMAT GET accepts either PINS, or the optional parameters color, contains and refersTo");
+        return;
+      }
+    }
+
+    List<Note> result = new ArrayList<>();
+
+    // filter notes
+    for (Note n : notes) {
+      // skip this note if there is a color specified but the note doesn't contain that color
+      if (color != null && !n.getColor().equals(color)) {
+        continue;
+      }
+
+      // skip this note if there is a coordinate specified but the note doesn't contain that coordinate
+      if (contains != null) {
+        if (!n.getX().equals(contains[0]) || !n.getY().equals(contains[1]) {
+          continue;
+        }
+      }
+
+      if (refersTo != null && !n.getMessage().contains(refersTo)) {
+        continue;
+      }
+      result.add(n);
+    }
+    out.println("OK " + result.size());
+    for (Note n : result) {
+      out.println(n.formatted());
+    }
   }
 
   // handle DISCONNECT command
