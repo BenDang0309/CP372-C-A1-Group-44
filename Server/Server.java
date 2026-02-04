@@ -10,6 +10,11 @@ public final class Server {
             System.err.println("wrong format, less than 6 inputs");
             System.exit(1);
         }
+
+        ExecutorService pool = null;
+        ServerSocket serverSocket = null;
+        int port = -1;
+
         try {
             // seperate the input into pieces
             final int port = Integer.parseInt(args[0]);
@@ -32,16 +37,27 @@ public final class Server {
 
             // process services
             while (true) {
-                Socket connection = socket.accept();
-                Conversation conv = new Conversation(connection, board);
-                pool.submit(conv);
+                Socket connection = null
+                try {
+                    connection = socket.accept();
+                    Conversation conv = new Conversation(connection, board);
+                    pool.submit(conv);
+                } catch (RuntimeException rte) {
+                    System.err.println("Failed to start conversation: " + rte.getMessage());
+                    if (connection != null && !connection.isClosed()) {
+                        try { connection.close(); } catch (IOException ignored) {}
+                    }
+                }
             }
         } catch (NumberFormatException e) {
             System.err.println("Bad numeric argument: " + e.getMessage());
         } catch (IOException ioe) {
             System.err.println("Could not start server on port " + port + ": " + ioe.getMessage());
         } finally {
-          pool.shutdown();
+            if (pool != null) pool.shutdown();
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                try { serverSocket.close(); } catch (IOException ignored) {}
+            }
         }
     }
 }
