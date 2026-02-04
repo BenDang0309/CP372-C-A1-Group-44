@@ -4,7 +4,6 @@ public class Board {
   private final int boardW;
   private final int boardH;
   private final Set<String> colors;
-  private final String initLine;
   private final List<Note> notes;
   
   public Board(int boardW, int boardH, int noteW, int noteH, List<String> colors) {
@@ -27,11 +26,7 @@ public class Board {
 
     for (i = 0; i < colors.size(); i++){
       colors.add(colors(i).trim().toLowerCase())
-    }
-
-    // initialization format
-    this.initLine = "INIT " + boardW + " " + boardH + " " + noteW + " " + noteH + " " + String.join(",", colors);
-    
+    }    
     this.notes = new ArrayList<>();
   }
 }
@@ -106,6 +101,5 @@ private String standardize(String msg) {
 }
 
 // getters
-public String getInitLine { return initLine; }
 public int getNoteW() { return noteW; }
 public int getNoteH() { return noteH; }
