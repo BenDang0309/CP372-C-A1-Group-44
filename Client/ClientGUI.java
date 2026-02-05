@@ -35,11 +35,13 @@ public class ClientGUI extends JFrame {
 
         output.setEditable(false);
         output.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        postMsg.setLineWrap(true);
 
         JPanel top = new JPanel();
+        top.setBorder(new TitledBorder("Connection"));
         top.add(new JLabel("Host:"));
         top.add(hostField);
-        top.add(new JLabel("Port:"));
+        top.add(new JLabel("Port (editable):"));
         top.add(portField);
         top.add(connectBtn);
         top.add(disconnectBtn);
@@ -81,6 +83,7 @@ public class ClientGUI extends JFrame {
         add(new JScrollPane(output), BorderLayout.SOUTH);
 
         wireActions();
+        setConnected(false);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
@@ -91,21 +94,28 @@ public class ClientGUI extends JFrame {
 
         connectBtn.addActionListener(e -> {
             try {
+                int port = Integer.parseInt(portField.getText().trim());
+
                 ProtocolClient.Handshake h =
-                        client.connect(hostField.getText(), Integer.parseInt(portField.getText()));
-                output.append("Connected\n");
+                        client.connect(hostField.getText().trim(), port);
+
                 postColor.removeAllItems();
                 for (String c : h.colors) postColor.addItem(c);
+
+                output.append("Connected to " + hostField.getText() + ":" + port + "\n");
+                setConnected(true);
+
+            } catch (NumberFormatException nfe) {
+                output.append("ERROR: Port must be a number\n");
             } catch (Exception ex) {
                 output.append("Connect error: " + ex.getMessage() + "\n");
             }
         });
 
         disconnectBtn.addActionListener(e -> {
-            try {
-                client.disconnect();
-                output.append("Disconnected\n");
-            } catch (IOException ignored) {}
+            try { client.disconnect(); } catch (IOException ignored) {}
+            output.append("Disconnected\n");
+            setConnected(false);
         });
 
         postBtn.addActionListener(e ->
@@ -134,6 +144,19 @@ public class ClientGUI extends JFrame {
         } catch (Exception e) {
             output.append("ERROR: " + e.getMessage() + "\n");
         }
+    }
+
+    private void setConnected(boolean connected) {
+        connectBtn.setEnabled(!connected);
+        disconnectBtn.setEnabled(connected);
+
+        postBtn.setEnabled(connected);
+        pinBtn.setEnabled(connected);
+        unpinBtn.setEnabled(connected);
+        getBtn.setEnabled(connected);
+        getPinsBtn.setEnabled(connected);
+        shakeBtn.setEnabled(connected);
+        clearBtn.setEnabled(connected);
     }
 
     public static void main(String[] args) {
