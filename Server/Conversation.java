@@ -193,7 +193,7 @@ final class Conversation implements Runnable {
       } else if (param.startsWith("refersTo=")) {
         refersTo = param.substring(9).trim();
       } else {
-        out.println("ERROR INVALID_FORMAT GET accepts either PINS, or the optional parameters color, contains and refersTo");
+        out.println("ERROR INVALID_FORMAT GET either has no following word, accepts PINS, or the optional parameters color, contains and refersTo");
         return;
       }
     }
