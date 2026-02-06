@@ -42,11 +42,6 @@ public class Board {
     return colors.contains(color.trim().toLowerCase());
   }
   
-  // get list of all notes to iterate through for GET
-  public synchronized List<Note> getNotes() {
-    return new ArrayList<>(notes);
-  }
-  
   // checks for errors, then post note into board
   public synchronized String post(int x, int y, String color, String message) {
     if (x < 0 || y < 0 || x + noteW > boardW || y + noteH > boardH) return "ERROR OUT_OF_BOUNDS";
@@ -111,4 +106,5 @@ public class Board {
   public int getNoteW() { return noteW; }
   public int getNoteH() { return noteH; }
   public List<String> getColors() { return new ArrayList<>(colors); }
+  public synchronized List<Note> getNotes() { return new ArrayList<>(notes); }
 }
